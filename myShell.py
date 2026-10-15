@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import pathlib
 
 pipe_file = ""
 
@@ -66,6 +67,7 @@ def handle_command(command, is_piped = False):
     :param is_piped: whether the output is being piped
     :return: None
     """
+    global current_path
     if command == "hello":
         my_print(f"Hello, {get_username()}!", is_piped)
         return
@@ -80,6 +82,9 @@ def handle_command(command, is_piped = False):
                 target = cmd_list[1]
                 if target == "..":
                     target = os.path.dirname(current_path)
+                if target == "/":
+                    drive = pathlib.Path(os.getcwd()).parts[0]
+                    target = drive + "\\"
                 os.chdir(target)
             current_path = os.getcwd()
         except Exception as e:
